@@ -1,0 +1,23 @@
+
+TODO: Document your timezone operations:
+- What timezone was your original data in?
+- How did you localize the data?
+- What timezone did you convert to?
+- What issues did you encounter with DST? (Note: Using UTC avoids DST ambiguity)
+- Include at least one example showing a datetime before and after conversion
+- Explain why UTC is recommended as the base timezone for storing temporal data
+1.The orginal time zone was naive, the information was not provided by the data set, and so we do not know.
+2.I localized the data to universal standard time.
+3.I converted the time zone to eastern standard time. 
+4.The issues I encountered is that day light saving time transitions is not universal all over the world and 
+so the best practice is to just keep it in universal standard time and then convert it locally whenever 
+you need to. There are ambiguity issues because some countries do not use it and it starts and ends at 
+different parts of the year.
+5. my example of utc data
+2023-01-01 00:00:00+00:00      P0001    98.389672          71   
+2023-01-02 00:00:00+00:00      P0001    98.492046          67  
+
+after when I converted to eastern standard time 
+date                                                                     
+2022-12-31 19:00:00-05:00  68.996865  2023      1    1             None  
+2023-01-01 19:00:00-05:00  67.720215  2023      1    2             None  
