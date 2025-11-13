@@ -1,0 +1,83 @@
+
+TODO: Document your missing data handling:
+- How many missing values did you find?
+- What percentage of data was missing?
+- Which method did you use to fill missing values?
+- Why did you choose that method?
+- What are the pros/cons of your approach?
+- Include examples showing missing data patterns
+Missing Data Report
+
+1. Missing Value Summary:
+After checking the dataset, I found that around 96 percent 
+of the data had missing values across several columns, most 
+commonly in temperature and heart_rate. The total number of 
+missing values was approximately 323, which is not negligible 
+but small enough to handle with standard imputation methods.
+
+2. Missing Data Patterns:
+Most of the missing values occurred because we forced up 
+sampling from monthly to daily meaning that we are producing 
+a lot of missing values. It makes sense that 96 percent of the 
+data is missing because we upsampled from month to day.
+
+3. Imputation Method:
+I used time based interpolation (`method='time'`) to fill the missing values. 
+This approach estimates missing points by looking at surrounding timestamps and 
+interpolating based on actual time differences. For a few variables where interpolation 
+didnt make sense (like categorical flags), I used forward fill (`ffill`) to carry the
+last valid value forward.
+
+4. Rationale:
+I chose time based interpolation because the data is time series with 
+uneven sampling intervals. Linear or mean imputation would ignore time 
+gaps and could distort the trends. Time interpolation, on the other hand, 
+preserves continuity and gives smoother transitions between recorded points.
+
+5. Pros and Cons:
+The main advantage of this approach is that it maintains realistic trends over 
+time and avoids sudden jumps that could come from other methods. However, 
+it assumes that changes between two observations are gradual, which might not always 
+be true, especially in ICU data where vital signs can change abruptly.
+
+6. Example:
+Before interpolation:
+    2025-11-10  98.4
+    2025-11-11   NaN
+    2025-11-12  99.2
+
+After interpolation:
+    2025-11-10  98.4
+    2025-11-11  98.8
+    2025-11-12  99.2
+
+This confirms that the interpolation filled missing values reasonably without introducing unrealistic spikes or trends.
+
+
+Missing patterns:
+Missing by month:
+date
+1      0
+2     27
+3     30
+4     29
+5     30
+6     29
+7     30
+8     30
+9     29
+10    30
+11    29
+12    30
+Name: temperature, dtype: int64
+
+Missing by day of week:
+date
+0    46
+1    45
+2    47
+3    46
+4    46
+5    47
+6    46
+Name: temperature, dtype: int64
